@@ -5,6 +5,7 @@ import { Card } from '../types';
 import { Controls, GameArea, Header, LargeFailMessage, LargeSuccessMessage, Score } from '../components';
 import { isNumeric } from '../utils';
 import styled from 'styled-components';
+import { Center } from '../components/center';
 
 function useDeckGame() {
   const createDeckMutation = useMutation(() => createNewDeck());
@@ -75,19 +76,42 @@ export default function GamePage() {
   }, [cardsOnDeskScore, isBust, game.highScore, numberOfCards]);
 
   if (game.loadingGame) {
-    return <div>Loading</div>;
+    return (
+      <Page>
+        <Center height="100vh">Loading...</Center>
+      </Page>
+    );
   }
 
   return (
     <Page>
       <Header highScore={game.highScore} />
-      <GameArea cards={game.cards} />
-      <Score score={cardsOnDeskScore} />
-      {isBust && <LargeFailMessage>You are bust!</LargeFailMessage>}
-      {hasWon && <LargeSuccessMessage>You won!</LargeSuccessMessage>}
-      <Controls allowDraw={!isBust && !hasWon} onRestartClick={handleRestartClick} onDrawClick={handleDrawClick} />
+      <MainContent>
+        <GameArea cards={game.cards} />
+      </MainContent>
+      <Center>
+        <Score score={cardsOnDeskScore} />
+      </Center>
+      <Center>
+        {isBust && <LargeFailMessage>You are bust!</LargeFailMessage>}
+        {hasWon && <LargeSuccessMessage>You won!</LargeSuccessMessage>}
+      </Center>
+      <Controls
+        disabled={game.drawingCard}
+        allowDraw={!isBust && !hasWon}
+        onRestartClick={handleRestartClick}
+        onDrawClick={handleDrawClick}
+      />
     </Page>
   );
 }
 
-const Page = styled.div``;
+const Page = styled.div`
+  background-color: ${(props) => props.theme.colors.light};
+  min-height: 100vh;
+  color: ${(props) => props.theme.colors.dark};
+`;
+
+const MainContent = styled.div`
+  margin: ${(props) => props.theme.spacing.medium};
+`;
