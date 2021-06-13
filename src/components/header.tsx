@@ -13,7 +13,7 @@ function Header(props: Props) {
     <Wrapper>
       <Container>
         <Row>
-          <Line>High Score: {props.highScore}</Line>
+          <Line>High Score: {props.highScore} cards</Line>
         </Row>
       </Container>
     </Wrapper>
