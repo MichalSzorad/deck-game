@@ -1,46 +1,43 @@
-# Getting Started with Create React App
+# The Deck Game
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Testing plan
 
-## Available Scripts
 
-In the project directory, you can run:
+### Unit testing
+For easy unit testing a refactoring would be needed.
+`react-testing-library` is good for testing React components.
 
-### `yarn start`
+Most of the dummy components located at `src/components` do not need any testing, as they do not include any logic or any hardcoded values.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+`src/components/controls.tsx`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Button element with text "Draw Card" is present
+- When clicked on the button, `onDrawClick` is fired
+- Button is disabled when `allowDraw` is set to false or when whole form `Controls` is disabled. By default, it should be enabled.
 
-### `yarn test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+`src/deck-api`
 
-### `yarn build`
+- We can use `jest` as no React is present. 
+- We can mock `fetch` to return custom data and to make sure the data manipulation is correct
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+`src/pages/game.tsx`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- Refactoring would be needed
+- We could make `useDeckGame` to serve data from `React.Context` and by doing that, we can mock anything the `useDeckGame` returns.
+- By using mocked data we can verify that when `loading` is set to `true`, a text "Loading..." is displayed
+- By using mocked data we can verify that when `error` is set to `error`, proper error message is displayed
+- By using mocked data we can verify that when game is not loading and has no errors, controls are displayed
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `yarn eject`
+`src/deck-game-hook`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- Ideally this could be done with `React.Context`
+- Rest API methods are provided by `React.Context` and thus can be easily mocked
+- By using mocked data we can verify that `hasWon` is `true` when the sum of the cards on a table is exactly 21.
+- By using mocked data we can verify that `isBust` is ONLY `true` when the sum of the cards on a table is greater than 21.
+- By using mocked data we can verify that `cardsOnDeskScore` is computed correctly - 10 for face cards, 11 for ace, correct value otherwise
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Integration testing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Cypress is a great tool which can be used to test the code. Backend can be isolated by mocking `fetch` requests. 
