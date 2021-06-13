@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Button } from './button';
-import { Center } from './center';
+import Center from './center';
 
 interface Props {
   onDrawClick?(): void;

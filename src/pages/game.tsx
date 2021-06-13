@@ -2,10 +2,9 @@ import { useMutation } from 'react-query';
 import { createNewDeck, drawOneCard } from '../deck-api';
 import { useEffect, useState } from 'react';
 import { Card } from '../types';
-import { Controls, GameArea, Header, LargeFailMessage, LargeSuccessMessage, Score } from '../components';
+import { Center, Controls, GameArea, Header, LargeFailMessage, LargeSuccessMessage, Page, Score } from '../components';
 import { isNumeric } from '../utils';
 import styled from 'styled-components';
-import { Center } from '../components/center';
 
 function useDeckGame() {
   const createDeckMutation = useMutation(() => createNewDeck());
@@ -32,6 +31,8 @@ function useDeckGame() {
     createGame();
   }
 
+  const error = createDeckMutation.error || drawCardMutation.error;
+
   return {
     createGame,
     drawCard,
@@ -41,6 +42,7 @@ function useDeckGame() {
     loadingGame: createDeckMutation.isLoading,
     highScore,
     setHighScore,
+    error,
   };
 }
 
@@ -83,6 +85,14 @@ export default function GamePage() {
     );
   }
 
+  if (game.error) {
+    return (
+      <Page>
+        <Center height="100vh">There has been an error, please reload and try again later.</Center>
+      </Page>
+    );
+  }
+
   return (
     <Page>
       <Header highScore={game.highScore} />
@@ -105,12 +115,6 @@ export default function GamePage() {
     </Page>
   );
 }
-
-const Page = styled.div`
-  background-color: ${(props) => props.theme.colors.light};
-  min-height: 100vh;
-  color: ${(props) => props.theme.colors.dark};
-`;
 
 const MainContent = styled.div`
   margin: ${(props) => props.theme.spacing.medium};
