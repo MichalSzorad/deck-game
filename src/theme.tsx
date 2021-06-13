@@ -17,3 +17,5 @@ export const theme = {
     giant: '64px',
   },
 };
+
+export type Theme = typeof theme;
