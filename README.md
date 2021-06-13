@@ -1,7 +1,14 @@
 # The Deck Game
 
-## Testing plan
+## Install the game
+Required tools: NodeJS, Yarn, Git
 
+1. Git pull current repository
+2. `yarn install` to install dependencies
+3. `yarn start` to start development mode
+
+
+## Testing plan
 
 ### Unit testing
 For easy unit testing a refactoring would be needed.
